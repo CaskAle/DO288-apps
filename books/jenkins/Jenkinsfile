@@ -14,7 +14,7 @@ pipeline {
         //TODO: Edit these vars as per your env
         DEV_PROJECT = "troyankersen-books-dev"
         STAGE_PROJECT = "troyankersen-books-stage"
-        APP_GIT_URL = "https://github.com/CaskAle/DO288-apps#custom-pipeline"
+        APP_GIT_URL = "https://github.com/CaskAle/DO288-apps"
         NEXUS_SERVER = "http://nexus-common.apps.na45.prod.nextcle.com"
 
         // DO NOT CHANGE THE GLOBAL VARS BELOW THIS LINE
