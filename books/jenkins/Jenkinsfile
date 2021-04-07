@@ -63,8 +63,8 @@ pipeline {
                 sh '''
                     oc project ${DEV_PROJECT}
                     oc new-app --as-deployment-config --name ${APP_NAME} \
-                    nodejs:12~${APP_GIT_URL} --context-dir books \
-                    --build-env ${NEXUS_SERVER} 
+                    nodejs:12~${APP_GIT_URL} --context-dir ${APP_NAME} \
+                    --build-env npm_config_registry=${NEXUS_SERVER} 
                     oc expose svc/${APP_NAME}
                    '''
             }
@@ -128,10 +128,10 @@ pipeline {
                 echo '### Creating a new app in Staging ###'
                 //TODO: Create a new app in stage using the books:stage image stream and expose the service
                 sh '''
-                  oc project ${STAGE_PROJECT}
-                  oc new-app --as-deployment-config --name ${APP_NAME} -i books:stage
-                  oc expose svc/${APP_NAME}
-                  '''
+                     oc project ${STAGE_PROJECT}
+                     oc new-app --as-deployment-config --name ${APP_NAME} -i ${APP_NAME}:stage
+                     oc expose svc/${APP_NAME}
+                   '''
             }
         }
 
@@ -144,7 +144,7 @@ pipeline {
 
                     openshift.withCluster() {
                         //TODO: Watch deployment until pod is in 'Running' state
-                        openshift.withProject( {"$STAGE_PROJECT}" ) {
+                        openshift.withProject( "${STAGE_PROJECT}" ) {
                           def deployment = openshift.selector("dc", "${APP_NAME}").rollout()
                           openshift.selector("dc", "${APP_NAME}").related('pods').untilEach(1) {
                             return (it.object().status.phase == "Running")
