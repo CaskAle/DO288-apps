@@ -1,0 +1,8 @@
+kind: Deployment
+spec:
+  template:
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: todo-config
